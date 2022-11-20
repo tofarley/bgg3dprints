@@ -26,8 +26,75 @@ resource "random_pet" "lambda_bucket_name" {
   length = 4
 }
 
+resource "random_pet" "website_bucket_name" {
+  prefix = "bgg3dprints-web"
+  length = 4
+}
+
 resource "aws_s3_bucket" "lambda_bucket" {
   bucket = random_pet.lambda_bucket_name.id
+}
+
+#.deploy/terraform/static-site/iam.tf
+data "aws_iam_policy_document" "website_policy" {
+  statement {
+    actions = [
+      "s3:GetObject"
+    ]
+    principals {
+      identifiers = ["*"]
+      type = "*"
+    }
+    resources = [
+      "${aws_s3_bucket.website_bucket.arn}/*"
+    ]
+  }
+}
+
+resource "aws_s3_bucket" "website_bucket" {
+  bucket = random_pet.website_bucket_name.id
+  #acl = "private"
+  #policy = data.aws_iam_policy_document.website_policy.json
+}
+
+resource "aws_s3_bucket_acl" "example_bucket_acl" {
+  bucket = aws_s3_bucket.website_bucket.id
+  acl = "private"
+}
+
+resource "aws_s3_bucket_policy" "website_bucket_policy" {
+  bucket = aws_s3_bucket.website_bucket.id
+  policy = data.aws_iam_policy_document.website_policy.json
+}
+
+# resource "aws_s3_bucket_versioning" "versioning_example" {
+#   bucket = aws_s3_bucket.example.id
+#   versioning_configuration {
+#     status = "Enabled"
+#   }
+#}
+
+resource "aws_s3_bucket_website_configuration" "website_bucket_configuration" {
+  bucket = aws_s3_bucket.website_bucket.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
+
+resource "aws_s3_object" "object1" {
+  for_each = fileset("dist/", "*")
+  bucket = aws_s3_bucket.website_bucket.id
+  key = each.value
+  content_type = "text/html"
+  source = "dist/${each.value}"
+  #acl = "public-read"
+  etag = filemd5("dist/${each.value}")
 }
 
 resource "aws_s3_bucket_acl" "bucket_acl" {

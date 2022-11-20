@@ -1,0 +1,87 @@
+
+<html lang="en">
+  
+    <head>
+        <meta charset="UTF-8">
+        <title>GFG User Details</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <!-- INCLUDING JQUERY-->
+        <script src=
+    "https://code.jquery.com/jquery-3.5.1.js">
+        </script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+        <!-- CSS FOR STYLING THE PAGE -->
+        <style>
+            table {
+                margin: 0 auto;
+                font-size: large;
+                border: 1px solid black;
+            }
+      
+            h1 {
+                text-align: center;
+                color: #006600;
+                font-size: xx-large;
+                font-family: 'Gill Sans', 
+                    'Gill Sans MT', ' Calibri', 
+                    'Trebuchet MS', 'sans-serif';
+            }
+      
+            td {
+                background-color: #E4F5D4;
+                border: 1px solid black;
+            }
+      
+            th,
+            td {
+                font-weight: bold;
+                border: 1px solid black;
+                padding: 10px;
+                text-align: center;
+            }
+      
+            td {
+                font-weight: lighter;
+            }
+        </style>
+    </head>
+      
+    <body>
+        <section>
+
+            <form>
+                <div class="jumbotron" style="padding: 15px;">
+                    <div class="form-group">
+                        <label for="geeklistId">Geeklist ID (303285 is the ID for the 2022 VFM)</label>
+
+                        <input id="geeklistId" class="form-control" type="text" name = "geeklistId" placeholder="geeklistId" aria-describedby="help" maxlength="9" value="303285"><br />
+                        <label for="username">BGG username</label>
+
+                        <input id="username" maxlength="20" class="form-control" type="text" name = "username" placeholder="username" aria-describedby="help"><br />
+
+                        <small id="help" class="form-text text-muted">Enter a BGG username and the Geeklist ID for an auction or flea market list. The site will return the given user's BGG wishlish items posted on the Geeklist.</small><br />
+
+                        <input onclick="return findProject()" type="submit" value="Go">
+                    </div>
+                </div>
+            </form>
+            
+            <script>
+                function findProject(){
+                    //let url = 'https://sz42snmsrvqarnpu5vmxbyheli0alrgx.lambda-url.us-east-1.on.aws/';
+                    let url = 'result.html?geeklistId=';
+                    url += document.getElementById("geeklistId").value;
+                    url += '&username=';
+                    url += document.getElementById("username").value;
+                    window.location = url
+                    return false;
+                }
+            </script>
+
+        </section>
+    </body>
+      
+    </html>
