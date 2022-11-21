@@ -86,8 +86,34 @@ resource "aws_s3_bucket_website_configuration" "website_bucket_configuration" {
   error_document {
     key = "error.html"
   }
+
+  routing_rule {
+    condition {
+      key_prefix_equals = "search/"
+    }
+    redirect {
+      replace_key_prefix_with = "result/"
+      host_name = "${aws_lambda_function_url.test_latest.url_id}.lambda-url.${var.aws_region}.on.aws"
+
+      #host_name = <url_id>.lambda-url.<region>.on.aws
+      #host_name = "iil7g7seqoihgoayfd5hr2pkx40ikost.lambda-url.us-east-1.on.aws"
+      protocol = "https"
+    }
+  }
 }
 
+# [
+#     {
+#         "Condition": {
+#             "KeyPrefixEquals": "search/"
+#         },
+#         "Redirect": {
+#             "HostName": "iil7g7seqoihgoayfd5hr2pkx40ikost.lambda-url.us-east-1.on.aws",
+#             "Protocol": "https",
+#             "ReplaceKeyPrefixWith": "result/"
+#         }
+#     }
+# ]
 
 resource "aws_s3_object" "object1" {
   for_each = fileset("dist/", "*")
