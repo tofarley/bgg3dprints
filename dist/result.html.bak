@@ -1,0 +1,121 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Wishlist-inator</title>
+
+    <!-- INCLUDING JQUERY-->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <style>
+        .loader {
+            position: relative;
+            left: 40%;
+            top: 5%;
+            z-index: 1;
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myloader");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+    <!-- CSS FOR STYLING THE PAGE -->
+    <style>
+        table {
+            margin: 0 auto;
+            font-size: large;
+            border: 1px solid black;
+        }
+
+        h1 {
+            text-align: center;
+            color: #006600;
+            font-size: xx-large;
+            font-family: 'Gill Sans',
+                'Gill Sans MT', ' Calibri',
+                'Trebuchet MS', 'sans-serif';
+        }
+
+        td {
+            background-color: #E4F5D4;
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            font-weight: bold;
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        td {
+            font-weight: lighter;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <!-- TABLE CONSTRUCTION-->
+        <table id='table'>
+            <!-- HEADING FORMATION -->
+
+            <script>
+                $(document).ready(function () {
+                    
+                    myFunction();
+
+                    const params = new URLSearchParams(window.location.search)
+    
+                    let geeklistId = params.get('geeklistId');
+                    let username = params.get('username');
+
+                    let url = 'https://sz42snmsrvqarnpu5vmxbyheli0alrgx.lambda-url.us-east-1.on.aws/';
+                    url += geeklistId + '?username=' + username; 
+                    // FETCHING DATA FROM JSON FILE
+                    $.getJSON(url,
+                            function (data) {
+                        var student = '';
+
+                        // ITERATING THROUGH OBJECTS
+                        $.each(data, function (key, value) {
+
+                            //CONSTRUCTION OF ROWS HAVING
+                            // DATA FROM JSON OBJECT
+                            student += '<tr>';
+                                student += '<td>' + '<a href="' + value.url + '">' + value.name + '</a>' + '</td>';
+                            student += '</tr>';
+                        });
+
+                        //INSERTING ROWS INTO TABLE
+                        $('#table').append(student);
+                        myFunction();
+                    });
+                });
+                
+            </script>
+                    <div id="myloader" class="loader" style="display: none"></div>
+
+    </section>
+</body>
+
+</html>

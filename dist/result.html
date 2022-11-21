@@ -1,13 +1,21 @@
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Wishlist-inator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>3D Printing for Boardgames</title>
+    <!-- Latest compiled and minified CSS -->
 
-    <!-- INCLUDING JQUERY-->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+
     <style>
         .loader {
             position: relative;
@@ -36,86 +44,68 @@
                 x.style.display = "none";
             }
         }
+
+        var options = {
+              valueNames: [ 'name', 'born' ]
+        };
+
+        var userList = new List('users', options);
+
     </script>
-    <!-- CSS FOR STYLING THE PAGE -->
-    <style>
-        table {
-            margin: 0 auto;
-            font-size: large;
-            border: 1px solid black;
-        }
-
-        h1 {
-            text-align: center;
-            color: #006600;
-            font-size: xx-large;
-            font-family: 'Gill Sans',
-                'Gill Sans MT', ' Calibri',
-                'Trebuchet MS', 'sans-serif';
-        }
-
-        td {
-            background-color: #E4F5D4;
-            border: 1px solid black;
-        }
-
-        th,
-        td {
-            font-weight: bold;
-            border: 1px solid black;
-            padding: 10px;
-            text-align: center;
-        }
-
-        td {
-            font-weight: lighter;
-        }
-    </style>
-</head>
-
+    </head>
 <body>
-    <section>
-        <!-- TABLE CONSTRUCTION-->
-        <table id='table'>
-            <!-- HEADING FORMATION -->
-
-            <script>
-                $(document).ready(function () {
-                    
-                    myFunction();
-
-                    const params = new URLSearchParams(window.location.search)
+    <div id="myData" class="jumbotron"></div>
+    <script>
+        const params = new URLSearchParams(window.location.search)
     
-                    let geeklistId = params.get('geeklistId');
-                    let username = params.get('username');
+        let username = params.get('username');
 
-                    let url = 'https://sz42snmsrvqarnpu5vmxbyheli0alrgx.lambda-url.us-east-1.on.aws/';
-                    url += geeklistId + '?username=' + username; 
-                    // FETCHING DATA FROM JSON FILE
-                    $.getJSON(url,
-                            function (data) {
-                        var student = '';
+        let url = 'https://iil7g7seqoihgoayfd5hr2pkx40ikost.lambda-url.us-east-1.on.aws/?username=';
+        url += username; 
 
-                        // ITERATING THROUGH OBJECTS
-                        $.each(data, function (key, value) {
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                appendData(data);
+            })
+            .catch(function (err) {
+                console.log('error: ' + err);
+            });
+        function appendData(data) {
+            var mainContainer = document.getElementById("myData");
 
-                            //CONSTRUCTION OF ROWS HAVING
-                            // DATA FROM JSON OBJECT
-                            student += '<tr>';
-                                student += '<td>' + '<a href="' + value.url + '">' + value.name + '</a>' + '</td>';
-                            student += '</tr>';
-                        });
+            var div = document.createElement("div");
+            div.innerHTML = '<h1>' + data.username + '</h1>';
+            mainContainer.appendChild(div);
 
-                        //INSERTING ROWS INTO TABLE
-                        $('#table').append(student);
-                        myFunction();
-                    });
-                });
-                
-            </script>
-                    <div id="myloader" class="loader" style="display: none"></div>
+            var div = document.createElement("div");
+            var mystr = ""
 
-    </section>
+            for (var i = 0; i < data.games.length; i++) {
+                mystr += '<ul>'
+                mystr += '<li>' + '<a href="' + data.games[i].url + '">' + data.games[i].name + '</a>' + '<small> posted on ' + data.games[i].postdate + '</small>' + '</li>'
+                mystr += '<ul>'
+
+                //mainContainer.appendChild(div);
+
+                for (var x = 0; x < data.games[i].entries.length; x++) {
+                    //var div = document.createElement("div");
+                    //div.innerHTML = data.games[i].entries[x];
+                    mystr += '<li>' + '<a href="' + data.games[i].entries[x] + '">' + data.games[i].entries[x] + '</a>' + '</li>'
+
+                    //mainContainer.appendChild(div);
+                }
+                mystr += '</ul>'
+                mystr += '</ul>'
+
+            }
+
+            div.innerHTML = mystr
+            mainContainer.appendChild(div);
+
+        }
+    </script>
 </body>
-
 </html>

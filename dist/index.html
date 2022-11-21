@@ -51,18 +51,16 @@
       
     <body>
         <section>
-
             <form>
                 <div class="jumbotron" style="padding: 15px;">
                     <div class="form-group">
-                        <label for="geeklistId">Geeklist ID (303285 is the ID for the 2022 VFM)</label>
-
-                        <input id="geeklistId" class="form-control" type="text" name = "geeklistId" placeholder="geeklistId" aria-describedby="help" maxlength="9" value="303285"><br />
                         <label for="username">BGG username</label>
 
                         <input id="username" maxlength="20" class="form-control" type="text" name = "username" placeholder="username" aria-describedby="help"><br />
 
-                        <small id="help" class="form-text text-muted">Enter a BGG username and the Geeklist ID for an auction or flea market list. The site will return the given user's BGG wishlish items posted on the Geeklist.</small><br />
+                        <small id="help" class="form-text text-muted">
+                            Enter a BGG username to see a list of 3D-printable game components for all the games in their personal collection of games! Printable items are curated by the community at the <a href="https://boardgamegeek.com/geeklist/186909">3D Prints for Board Games</a> GeekList.
+                        </small><br />
 
                         <input onclick="return findProject()" type="submit" value="Go">
                     </div>
@@ -72,9 +70,7 @@
             <script>
                 function findProject(){
                     //let url = 'https://sz42snmsrvqarnpu5vmxbyheli0alrgx.lambda-url.us-east-1.on.aws/';
-                    let url = 'result.html?geeklistId=';
-                    url += document.getElementById("geeklistId").value;
-                    url += '&username=';
+                    let url = 'result.html?username=';
                     url += document.getElementById("username").value;
                     window.location = url
                     return false;

@@ -52,7 +52,9 @@ data "aws_iam_policy_document" "website_policy" {
 }
 
 resource "aws_s3_bucket" "website_bucket" {
-  bucket = random_pet.website_bucket_name.id
+  #bucket = random_pet.website_bucket_name.id
+  bucket = "${var.app_name}.${var.domain_name}"
+
   #acl = "private"
   #policy = data.aws_iam_policy_document.website_policy.json
 }
@@ -189,3 +191,18 @@ resource "aws_lambda_function_url" "test_latest" {
   }
 }
 
+# .deploy/terraform/static-site/route53.tf
+resource "aws_route53_zone" "primary" {
+  name = var.domain_name
+}
+
+resource "aws_route53_record" "web" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name = var.app_name
+  type = "A"
+  alias {
+    name = aws_s3_bucket.website_bucket.website_domain
+    zone_id = aws_s3_bucket.website_bucket.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
