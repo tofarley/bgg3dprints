@@ -9,6 +9,7 @@ variable "aws_region" {
 
 variable "domain_name" {
   type = string
+  default = "imagitronics.org"
 }
 
 variable "app_name" {

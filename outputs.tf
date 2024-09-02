@@ -23,3 +23,14 @@ output "website_endpoint" {
 
   value = aws_s3_bucket_website_configuration.website_bucket_configuration.website_endpoint
 }
+
+output "website_url" {
+  description = "Application URL"
+
+  value = "http://${var.app_name}.${var.domain_name}"
+}
+
+output "zone_name_servers" {
+  value       = aws_route53_zone.primary.name_servers
+  description = "Name servers for the Route53 zone"
+}

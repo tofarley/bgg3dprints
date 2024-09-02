@@ -31,9 +31,11 @@ override.tf.json
 
 # Ignore CLI configuration files
 .terraformrc
+.terraform.lock.hcl
 terraform.rc
 hello-world.zip
 response.json
 
 bgg3dprints-layer/*
 *.zip
+

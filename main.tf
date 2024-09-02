@@ -52,29 +52,13 @@ data "aws_iam_policy_document" "website_policy" {
 }
 
 resource "aws_s3_bucket" "website_bucket" {
-  #bucket = random_pet.website_bucket_name.id
   bucket = "${var.app_name}.${var.domain_name}"
-
-  #acl = "private"
-  #policy = data.aws_iam_policy_document.website_policy.json
-}
-
-resource "aws_s3_bucket_acl" "example_bucket_acl" {
-  bucket = aws_s3_bucket.website_bucket.id
-  acl = "private"
 }
 
 resource "aws_s3_bucket_policy" "website_bucket_policy" {
   bucket = aws_s3_bucket.website_bucket.id
   policy = data.aws_iam_policy_document.website_policy.json
 }
-
-# resource "aws_s3_bucket_versioning" "versioning_example" {
-#   bucket = aws_s3_bucket.example.id
-#   versioning_configuration {
-#     status = "Enabled"
-#   }
-#}
 
 resource "aws_s3_bucket_website_configuration" "website_bucket_configuration" {
   bucket = aws_s3_bucket.website_bucket.id
@@ -102,13 +86,22 @@ resource "aws_s3_bucket_website_configuration" "website_bucket_configuration" {
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "website_public_access_block" {
+  bucket = aws_s3_bucket.website_bucket.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
 # [
 #     {
 #         "Condition": {
 #             "KeyPrefixEquals": "search/"
 #         },
 #         "Redirect": {
-#             "HostName": "iil7g7seqoihgoayfd5hr2pkx40ikost.lambda-url.us-east-1.on.aws",
+#             "HostName": "iil7g7seqoihgayfd5hr2pkx40ikost.lambda-url.us-east-1.on.aws",
 #             "Protocol": "https",
 #             "ReplaceKeyPrefixWith": "result/"
 #         }
@@ -123,11 +116,6 @@ resource "aws_s3_object" "object1" {
   source = "dist/${each.value}"
   #acl = "public-read"
   etag = filemd5("dist/${each.value}")
-}
-
-resource "aws_s3_bucket_acl" "bucket_acl" {
-  bucket = aws_s3_bucket.lambda_bucket.id
-  acl    = "private"
 }
 
 # Upload zip to S3
@@ -149,7 +137,7 @@ resource "aws_lambda_layer_version" "lambda_layer" {
   filename   = "${path.module}/bgg3dprints-layer.zip"
   layer_name = "bgg3dprints_layer"
 
-  compatible_runtimes = ["python3.7"]
+  compatible_runtimes = ["python3.9"]
 }
 
 resource "aws_s3_object" "bgg3dprints" {
@@ -168,7 +156,7 @@ resource "aws_lambda_function" "bgg3dprints" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_object.bgg3dprints.key
 
-  runtime = "python3.7"
+  runtime = "python3.9"
   handler = "lambda_function.lambda_handler"
   timeout = 10
   source_code_hash = data.archive_file.bgg3dprints.output_base64sha256
@@ -217,7 +205,6 @@ resource "aws_lambda_function_url" "test_latest" {
   }
 }
 
-# .deploy/terraform/static-site/route53.tf
 resource "aws_route53_zone" "primary" {
   name = var.domain_name
 }
@@ -227,7 +214,7 @@ resource "aws_route53_record" "web" {
   name = var.app_name
   type = "A"
   alias {
-    name = aws_s3_bucket.website_bucket.website_domain
+    name = aws_s3_bucket_website_configuration.website_bucket_configuration.website_domain
     zone_id = aws_s3_bucket.website_bucket.hosted_zone_id
     evaluate_target_health = false
   }
