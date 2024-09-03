@@ -137,7 +137,7 @@ resource "aws_lambda_layer_version" "lambda_layer" {
   filename   = "${path.module}/bgg3dprints-layer.zip"
   layer_name = "bgg3dprints_layer"
 
-  compatible_runtimes = ["python3.9"]
+  compatible_runtimes = ["python3.10"]
 }
 
 resource "aws_s3_object" "bgg3dprints" {
@@ -156,9 +156,9 @@ resource "aws_lambda_function" "bgg3dprints" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_object.bgg3dprints.key
 
-  runtime = "python3.9"
+  runtime = "python3.10"
   handler = "lambda_function.lambda_handler"
-  timeout = 10
+  timeout = 300
   source_code_hash = data.archive_file.bgg3dprints.output_base64sha256
   layers = [aws_lambda_layer_version.lambda_layer.arn]
   role = aws_iam_role.lambda_exec.arn
