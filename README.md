@@ -34,6 +34,26 @@ In the example above, you would need to own the imagitronics.org domain, and the
 
 ```terraform apply```
 
+# Update your DNS
+
+You would now need to update your DNS records. For example:
+
+```
+function_name = "bgg3dprints"
+function_url = "https://t7dl7dijy6jp4bx54ed5p6l7e40kswvg.lambda-url.us-east-1.on.aws/"
+lambda_bucket_name = "bgg3dprints-mutually-brightly-pretty-wahoo"
+website_endpoint = "http://bgg3dprints.imagitronics.org.s3-website-us-east-1.amazonaws.com"
+website_url = "http://bgg3dprints.imagitronics.org"
+zone_name_servers = tolist([
+  "ns-1131.awsdns-13.org",
+  "ns-1873.awsdns-42.co.uk",
+  "ns-352.awsdns-44.com",
+  "ns-943.awsdns-53.net",
+])
+```
+
+I purchased my DNS through hover.com, so I would need to login to hover.com and update the nameservers for my domain to match the ones reported above... You will need to do this with whatever company you used to buy your domain name.
+
 
 ## License
 
