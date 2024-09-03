@@ -21,7 +21,7 @@ output "function_url" {
 output "website_endpoint" {
   description = "URL of the website"
 
-  value = aws_s3_bucket_website_configuration.website_bucket_configuration.website_endpoint
+  value = "http://${aws_s3_bucket_website_configuration.website_bucket_configuration.website_endpoint}"
 }
 
 output "website_url" {

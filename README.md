@@ -45,3 +45,7 @@ resource "aws_route53_record" "web" {
 module "website" {
   source = "./deploy/terraform"
 }
+
+
+
+curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{"queryStringParameters": {"username": "tofarley"}}'
