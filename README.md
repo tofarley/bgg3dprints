@@ -54,20 +54,6 @@ zone_name_servers = tolist([
 
 I purchased my DNS through hover.com, so I would need to login to hover.com and update the nameservers for my domain to match the ones reported above... You will need to do this with whatever company you used to buy your domain name.
 
-
-## License
-
-All files in this repository are released under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/). This means you are free to:
-
-- **Share**: Copy and redistribute the material in any medium or format
-- **Adapt**: Remix, transform, and build upon the material
-
-Under the following terms:
-
-- **Attribution**: You must give appropriate credit, provide a link to the license, and indicate if changes were made.
-- **NonCommercial**: You may not use the material for commercial purposes.
-- **ShareAlike**: If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
-
 ## Contact
 
 For questions, suggestions, or issues related to these 3D printable files, please open an issue in this repository or contact the repository owner directly.
@@ -88,4 +74,8 @@ https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html
 
 https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 
+# Local testing lambda
+
+```bash
 curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{"queryStringParameters": {"username": "tofarley"}}'
+```
