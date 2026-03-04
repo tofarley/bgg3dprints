@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script>
+    function showLoader() {
+        document.getElementById("myloader").style.display = "block";
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<form action="/results" method="post" onsubmit="showLoader()">
+    <div class="jumbotron" style="padding: 15px; margin-top: 20px;">
+        <h1 class="display-5">3D Prints for Board Games</h1>
+        <p class="lead">Find 3D-printable accessories for your BGG collection.</p>
+        <hr class="my-4">
+
+        {% if error %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="username">BGG username</label>
+            <input id="username" class="form-control" type="text" name="username"
+                   placeholder="username" aria-describedby="help" required>
+            <small id="help" class="form-text text-muted">
+                Enter any BGG username and we'll check their game collection against the
+                community-maintained
+                <a href="https://boardgamegeek.com/geeklist/186909">3D Prints for Board Games</a>
+                GeekList — showing you exactly which of their games have fan-designed,
+                3D-printable components available.
+            </small>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+<div class="mt-4 text-muted" style="font-size: 0.85em;">
+    <strong>Changelog</strong>
+    <ul class="mt-1">
+        <li><strong>March 2026</strong> — Rebuilt as a proper web app. Cleaned up link extraction to filter out images and handle the variety of ways community members format their posts.</li>
+    </ul>
+</div>
+
+<div id="myloader" class="loader" style="display: none;"></div>
+{% endblock %}

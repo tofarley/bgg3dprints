@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron" style="margin-top: 20px;">
+    <h1>{{ username }} has {{ total_games }} games in their collection.</h1>
+    <p>
+        {{ games|length }} of those games have 3D-printable accessories listed on
+        <a href="https://boardgamegeek.com/geeklist/{{ geeklist_id }}">3D Prints for Board Games</a>.
+    </p>
+
+    <ul>
+        {% for game in games %}
+        <li>
+            <a href="https://boardgamegeek.com/geeklist/{{ geeklist_id }}/item/{{ game.id }}#item{{ game.id }}">
+                {{ game.name }}
+            </a>
+            <small> posted on {{ game.postdate }}</small>
+            {% if game.urls %}
+            <ul>
+                {% for url in game.urls %}
+                <li><a href="{{ url }}">{{ url }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="/" class="btn btn-secondary mt-3">Search again</a>
+</div>
+{% endblock %}
