@@ -7,8 +7,10 @@ from urllib.parse import urlparse
 import requests
 from flask import Flask, render_template, request
 from lxml import objectify
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 BGG_TOKEN = os.environ.get("BGG_TOKEN", "not-a-real-token")
 GEEKLIST_ID = "186909"
